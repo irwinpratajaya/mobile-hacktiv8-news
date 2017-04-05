@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Text, View } from 'react-native'
 
 import Form from './Form'
 import DataList from './DataList'
 import MenuBar from './MenuBar'
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: [],
       keyword: '',
     }
   }
@@ -25,7 +25,7 @@ export default class Home extends Component {
 
         <Form handleChange={this.search.bind(this)}/>
 
-        <DataList data={this.state.data} handleKeyword={this.state.keyword}/>
+        <DataList data={this.props.filterResult} handleKeyword={this.state.keyword}/>
 
       </View>
 
@@ -34,9 +34,7 @@ export default class Home extends Component {
   }
 
   search(event) {
-    this.setState({
-      keyword: event.nativeEvent.text
-    })
+    this.props.searchNews(event.nativeEvent.text)
   }
 
   componentDidMount() {
@@ -45,12 +43,33 @@ export default class Home extends Component {
       return result.json()
     })
     .then(data => {
-      this.setState({data: data.hits})
+      this.props.getNews(data.hits)
     })
   }
 
 }
 
+const mapStateToProps = (state) => {
+  return {
+    filterResult: state.news.filterResult
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getNews: (results) => dispatch({
+      type: 'GET_NEWS',
+      payloads: results
+    }),
+    searchNews: (results) => dispatch({
+      type: 'SEARCH_NEWS',
+      payloads: results
+    })
+  }
+}
+
 const styles = {
 
 };
+
+export default connect(mapStateToProps, mapDispatchToProps) (Home)

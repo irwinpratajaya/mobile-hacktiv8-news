@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Text, View } from 'react-native'
+
 import MenuBar from './MenuBar'
 
 class Peoples extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      data: []
-    }
   }
 
   render() {
@@ -19,7 +18,7 @@ class Peoples extends Component {
 
         <MenuBar navigator={this.props.navigator} />
 
-        {this.state.data.map((item, index) => {
+        {this.props.people.map((item, index) => {
           return (
             <Text key={index}>
               {item.name}
@@ -37,9 +36,24 @@ class Peoples extends Component {
       return result.json()
     })
     .then(data => {
-      this.setState({data: data.results})
+      this.props.getPeople(data.results)
     })
   }
 }
 
-export default Peoples
+const mapStateToProps = (state) => {
+  return {
+    people: state.people
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getPeople: (results) => dispatch({
+      type: 'GET_PEOPLE',
+      payloads: results
+    })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Peoples)
