@@ -1,6 +1,8 @@
 import React from 'react'
 import { Text, View, TextInput } from 'react-native'
 
+import Home from './Home'
+
 const Form = (props) => (
   <View>
     <TextInput type="text" name="search" placeholder="search" onChange={props.handleChange} />

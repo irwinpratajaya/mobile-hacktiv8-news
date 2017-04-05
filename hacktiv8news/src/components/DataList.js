@@ -1,6 +1,8 @@
 import React from 'react'
 import { Text, ScrollView, TextInput, ListView } from 'react-native'
 
+import Home from './Home'
+
 const DataList = (props) => {
   return (
     <ScrollView style={styles.ListView}>
@@ -14,7 +16,7 @@ const DataList = (props) => {
       })
         .map((item, index) => {
         return (
-          <Text key={index}>
+          <Text key={index} style={styles.TextColumn}>
             {item.title}
           </Text>
         )
@@ -27,9 +29,18 @@ const DataList = (props) => {
 
 const styles={
   ListView:{
-    height: '90%',
+    height: '91%',
+    width: '100%',
+    padding: 5,
+    backgroundColor: 'lightblue',
+
+  },
+  TextColumn:{
     width: '100%',
     padding: 10,
+    marginTop: 5,
+    borderWidth: 0.5,
+    borderColor: 'rgba(0,0,0,0.1)',
   }
 }
 

@@ -1,54 +1,24 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import React from 'react'
+import { Navigator } from 'react-native'
 
-import Form from './components/Form'
-import DataList from './components/DataList'
+import Home from './components/Home'
+import People from './components/People'
 
-export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      data: [],
-      keyword: '',
-    }
-  }
+const App = () => (
+  <Navigator
+    initialRoute={{ title: 'home', newsobj: {} }}
+    renderScene={(route, navigator) => {
+      switch (route.title) {
+        case 'home':
+          return <Home navigator={navigator} />
+        case 'people':
+          return <People navigator={navigator} />
+        default:
+          return <Home />
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
+      }
+    }}
+  />
+)
 
-        <Form handleChange={this.search.bind(this)}/>
-
-        <DataList data={this.state.data} handleKeyword={this.state.keyword}/>
-
-      </View>
-
-
-    );
-  }
-
-  search(event) {
-    this.setState({
-      keyword: event.nativeEvent.text
-    })
-  }
-
-  componentDidMount() {
-    fetch('https://hn.algolia.com/api/v1/search?query=redux', {method: 'get'})
-    .then((result)=> {
-      return result.json()
-    })
-    .then(data => {
-      this.setState({data: data.hits})
-      console.log(this.state.data);
-      console.log('test halo halo');
-    })
-  }
-}
-
-const styles = {
-
-};
+export default App
